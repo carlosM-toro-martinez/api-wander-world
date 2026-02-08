@@ -11,6 +11,11 @@ export const destinations: Destination[] = [
     reviews: 1248,
     price: 899,
     category: "Cultural",
+    business: {
+      id: 1,
+      name: "Encuentra Tours",
+      logoUrl: null,
+    },
     description:
       "Descubre la Ciudad de la Luz con sus icónicos monumentos, museos de clase mundial y la exquisita gastronomía francesa.",
     durationDays: 7,
