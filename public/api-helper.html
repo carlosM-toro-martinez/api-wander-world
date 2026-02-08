@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API Helper - Potosy</title>
+    <link rel="stylesheet" href="/api-helper.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div>
+        <h1>API Helper</h1>
+        <p>POST/PUT rápidos para poblar datos sin herramientas externas.</p>
+      </div>
+      <div class="badge">Fetch Only</div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Configuración</h2>
+        <label class="field">
+          <span>Base URL</span>
+          <input id="baseUrl" type="text" value="http://localhost:5000/api/v1" />
+        </label>
+        <label class="field">
+          <span>Auth Token (Bearer)</span>
+          <input id="authToken" type="text" placeholder="opcional" />
+        </label>
+        <label class="field">
+          <span>Endpoint</span>
+          <select id="endpointSelect"></select>
+        </label>
+        <div class="row">
+          <label class="field">
+            <span>Método</span>
+            <input id="method" type="text" readonly />
+          </label>
+          <label class="field">
+            <span>Path</span>
+            <input id="path" type="text" readonly />
+          </label>
+        </div>
+        <label class="field">
+          <span>ID (para PUT con :id)</span>
+          <input id="resourceId" type="text" placeholder="ej: 1" />
+        </label>
+        <div class="field">
+          <span>Archivos</span>
+          <div id="fileInputs" class="file-list"></div>
+        </div>
+        <div class="actions">
+          <button id="sendBtn">Enviar</button>
+          <button id="copyCurlBtn" class="ghost">Copiar cURL</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Body</h2>
+        <p class="hint">Edita el JSON según tus datos. En multipart se enviará como texto.</p>
+        <textarea id="bodyInput" spellcheck="false"></textarea>
+      </section>
+
+      <section class="panel">
+        <h2>Respuesta</h2>
+        <div class="meta">
+          <span id="status">Status: -</span>
+          <span id="time">Tiempo: -</span>
+        </div>
+        <pre id="response"></pre>
+      </section>
+    </main>
+
+    <script src="/api-helper.js"></script>
+  </body>
+</html>

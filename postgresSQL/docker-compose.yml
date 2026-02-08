@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  postgresTourism:
+    image: postgres:16
+    container_name: postgres_tourism
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tourism_master
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_data_tourism:/var/lib/postgresql/data
+    networks:
+      - tourism_net
+
+volumes:
+  postgres_data_tourism:
+
+networks:
+  tourism_net:
+    driver: bridge
