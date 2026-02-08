@@ -2,10 +2,10 @@
   "name": "api-encuentra",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/server.ts",
   "scripts": {
     "dev": "nodemon --watch src --ext ts,json --exec \"ts-node src/server.ts\"",
-    "start": "node dist/server.js",
+    "start": "node dist/server.ts",
     "lint": "eslint .",
     "ts:dev": "ts-node src/server.ts",
     "build": "tsc",
