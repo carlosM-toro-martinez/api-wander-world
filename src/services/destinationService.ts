@@ -1,5 +1,5 @@
 import { prisma } from '../libs/prisma';
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '../../generated/prisma';
 
 export type DestinationCreateInput = {
   name: string;
