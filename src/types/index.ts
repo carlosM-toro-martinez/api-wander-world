@@ -27,6 +27,7 @@ export const DestinationSchema = z.object({
   rating: z.number(),
   reviews: z.number(),
   price: z.number(),
+  shareUrl: z.string().optional(),
   category: z.string(),
   business: z.object({
     id: z.number(),
@@ -66,6 +67,8 @@ export const ProfileSchema = z.object({
   name: z.string(),
   email: z.string(),
   initials: z.string(),
+  phone: z.string().optional(),
+  country: z.string().optional(),
   stats: ProfileStatsSchema,
   favoriteDestinationIds: z.array(z.number()),
   upcomingTripIds: z.array(z.number()),

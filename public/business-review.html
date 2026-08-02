@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Revision de negocios - API</title>
+    <link rel="stylesheet" href="/business-review.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">API</p>
+        <h1>Revision de negocios</h1>
+      </div>
+      <a class="helper-link" href="/api-helper.html">API Helper</a>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel config-panel">
+          <label class="field">
+            <span>Estado</span>
+            <select id="statusFilter">
+              <option value="">Todos</option>
+              <option value="PENDING">Pendientes</option>
+              <option value="APPROVED">Aprobados</option>
+              <option value="REJECTED">Rechazados</option>
+            </select>
+          </label>
+          <button id="refreshBtn" type="button">Actualizar</button>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="panel-title-row">
+            <h2>Solicitudes</h2>
+            <span id="countBadge" class="count-badge">0</span>
+          </div>
+          <div id="businessList" class="business-list"></div>
+        </section>
+      </aside>
+
+      <section class="panel detail-panel">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">BR</div>
+          <h2>Selecciona una solicitud</h2>
+          <p>Desde aqui puedes revisar datos legales, validar horarios y aprobar o rechazar negocios.</p>
+        </div>
+
+        <form id="detailForm" class="detail-form hidden">
+          <div class="detail-header">
+            <div class="detail-identity">
+              <img id="detailLogo" class="detail-logo" alt="Logo del negocio" />
+              <div>
+                <p id="detailStatus" class="status-pill">Pendiente</p>
+                <h2 id="detailTitle">Negocio</h2>
+              </div>
+            </div>
+            <div class="action-row">
+              <button id="approveBtn" type="button" class="success">Aprobar</button>
+              <button id="rejectBtn" type="button" class="warning">Rechazar</button>
+              <button id="deleteBtn" type="button" class="danger">Eliminar</button>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>Nombre comercial</span>
+              <input id="name" type="text" />
+            </label>
+            <label class="field">
+              <span>Rubro principal</span>
+              <select id="sectionId">
+                <option value="">Selecciona rubro</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>NIT / Licencia</span>
+              <input id="licenseNumber" type="text" />
+            </label>
+            <label class="field">
+              <span>Representante legal</span>
+              <input id="ownerFullName" type="text" />
+            </label>
+            <label class="field">
+              <span>Correo propietario</span>
+              <input id="ownerEmail" type="email" />
+            </label>
+            <label class="field">
+              <span>Telefono</span>
+              <input id="phoneNumber" type="text" />
+            </label>
+            <label class="field">
+              <span>Correo negocio</span>
+              <input id="mail" type="email" />
+            </label>
+            <label class="field span-2">
+              <span>Direccion</span>
+              <input id="address" type="text" />
+            </label>
+            <label class="field span-2">
+              <span>Logo URL</span>
+              <input id="logoUrl" type="text" />
+            </label>
+            <label class="field span-2">
+              <span>Descripcion</span>
+              <textarea id="description"></textarea>
+            </label>
+          </div>
+
+          <section class="hours-section">
+            <div class="section-head">
+              <h3>Horarios estructurados</h3>
+              <p>El rubro clasifica al negocio. Las categorias de servicios/anuncios se eligen en cada servicio. Formato requerido: HH:mm-HH:mm.</p>
+            </div>
+            <div id="hoursGrid" class="hours-grid"></div>
+          </section>
+
+          <div class="save-row">
+            <button id="saveBtn" type="button">Guardar cambios</button>
+            <span id="message" class="message"></span>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="/business-review.js"></script>
+  </body>
+</html>

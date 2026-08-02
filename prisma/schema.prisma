@@ -14,6 +14,21 @@ enum TripStatus {
   CANCELED
 }
 
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  PAID
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
 enum SubscriptionStatus {
   ACTIVE
   PAUSED
@@ -65,6 +80,7 @@ model Business {
   openingHours         OpeningHours[]
   images               Image[]
   destinations         Destination[]
+  bookings             Booking[]
 
   createdAt            DateTime             @default(now()) @map("created_at")
   updatedAt            DateTime             @updatedAt @map("updated_at")
@@ -167,6 +183,7 @@ model Destination {
   itinerary     DestinationItinerary[]
   reviewsDetail DestinationReview[]
   trips         Trip[]
+  bookings      Booking[]
   favorites     FavoriteDestination[]
 
   createdAt     DateTime                @default(now())
@@ -215,8 +232,13 @@ model User {
   passwordHash String                @db.VarChar(255)
   initials     String?               @db.VarChar(10)
   avatarUrl    String?               @db.VarChar(1024)
+  phone        String?               @db.VarChar(30)
+  country      String?               @db.VarChar(100)
   stats        UserStats?
   trips        Trip[]
+  bookings     Booking[]
+  paymentMethods PaymentMethod[]
+  payments     Payment[]
   notifications Notification[]
   favorites    FavoriteDestination[]
 
@@ -255,6 +277,64 @@ model Trip {
   updatedAt     DateTime   @updatedAt
 
   @@map("Trips")
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  bookingNumber String        @unique @map("booking_number") @db.VarChar(50)
+  status        BookingStatus @default(PENDING)
+  userId        Int           @map("user_id")
+  destinationId Int           @map("destination_id")
+  businessId    Int           @map("business_id")
+  travelDate    DateTime      @map("travel_date")
+  adults        Int           @default(1)
+  children      Int           @default(0)
+  notes         String?       @db.Text
+  totalPrice    Int           @default(0) @map("total_price")
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination   Destination   @relation(fields: [destinationId], references: [id], onDelete: Restrict)
+  business      Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@map("Bookings")
+}
+
+model PaymentMethod {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  type        String   @db.VarChar(50)
+  brand       String?  @db.VarChar(50)
+  last4       String?  @db.VarChar(4)
+  holderName  String?  @map("holder_name") @db.VarChar(255)
+  isDefault   Boolean  @default(false) @map("is_default")
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("Payment_Methods")
+}
+
+model Payment {
+  id              Int           @id @default(autoincrement())
+  userId          Int           @map("user_id")
+  bookingId       Int?          @map("booking_id")
+  amount          Int
+  currency        String        @default("BOB") @db.VarChar(10)
+  status          PaymentStatus @default(PENDING)
+  provider        String?       @db.VarChar(50)
+  providerIntentId String?      @map("provider_intent_id") @db.VarChar(255)
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("Payments")
 }
 
 model Notification {

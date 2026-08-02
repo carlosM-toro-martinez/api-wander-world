@@ -32,7 +32,33 @@ function toNumber(value: unknown): number | undefined {
 export class DestinationController {
   static async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const records = await DestinationService.getAll();
+      const {
+        search,
+        category,
+        minPrice,
+        maxPrice,
+        rating,
+        location,
+        durationDays,
+        availability,
+        businessId,
+        sectionId,
+      } = req.query as Record<string, string | undefined>;
+
+      const filters = {
+        search,
+        category,
+        minPrice: toNumber(minPrice),
+        maxPrice: toNumber(maxPrice),
+        rating: toNumber(rating),
+        location,
+        durationDays: toNumber(durationDays),
+        availability,
+        businessId: toNumber(businessId),
+        sectionId: toNumber(sectionId),
+      };
+
+      const records = await DestinationService.getAll(filters);
       res.json(records.map(mapDestination));
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -281,6 +307,29 @@ export class DestinationController {
           reviews: result.reviewsCount,
         },
       });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  static async getReviews(req: Request, res: Response): Promise<void> {
+    try {
+      const id = parseIdParam(req);
+      if (!id) {
+        res.status(400).json({ error: 'Invalid id' });
+        return;
+      }
+
+      const reviews = await DestinationService.getReviews(id);
+      res.json(
+        reviews.map(review => ({
+          id: review.id,
+          name: review.reviewerName,
+          rating: review.rating,
+          comment: review.comment,
+          date: formatDateEsShort(review.reviewedAt),
+        })),
+      );
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }

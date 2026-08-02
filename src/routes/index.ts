@@ -15,7 +15,13 @@ import productRoutes from './productRoutes';
 import openingHoursRoutes from './openingHoursRoutes';
 import imageRoutes from './imageRoutes';
 import favoriteRoutes from './favoriteRoutes';
+import bookingRoutes from './bookingRoutes';
+import paymentMethodRoutes from './paymentMethodRoutes';
+import paymentRoutes from './paymentRoutes';
 import { authMiddleware } from '../middlewares/auth';
+import { BookingController } from '../controllers/bookingController';
+import { ProfileController } from '../controllers/profileController';
+import { createImageFieldsUpload } from '../middlewares/upload';
 
 function router(app: express.Application) {
   const routes = express.Router();
@@ -26,6 +32,12 @@ function router(app: express.Application) {
   //routes.use(authMiddleware);
   routes.use('/destinations', destinationRoutes);
   routes.use('/categories', categoryRoutes);
+  routes.get('/profile', ProfileController.getCurrent);
+  routes.put(
+    '/profile',
+    createImageFieldsUpload('profiles', ['avatar', 'image']),
+    ProfileController.updateCurrent,
+  );
   routes.use('/profiles', profileRoutes);
   routes.use('/notifications', notificationRoutes);
   routes.use('/trips', tripRoutes);
@@ -39,6 +51,10 @@ function router(app: express.Application) {
   routes.use('/opening-hours', openingHoursRoutes);
   routes.use('/images', imageRoutes);
   routes.use('/favorites', favoriteRoutes);
+  routes.use('/bookings', bookingRoutes);
+  routes.use('/payment-methods', paymentMethodRoutes);
+  routes.use('/payments', paymentRoutes);
+  routes.get('/users/:userId/trips', BookingController.getMyTrips);
 }
 
 export default router;

@@ -25,8 +25,51 @@ export type DestinationCreateInput = {
 };
 
 export class DestinationService {
-  static async getAll() {
+  static async getAll(filters?: {
+    search?: string;
+    category?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    rating?: number;
+    location?: string;
+    durationDays?: number;
+    availability?: string;
+    businessId?: number;
+    sectionId?: number;
+  }) {
     return prisma.destination.findMany({
+      where: {
+        AND: [
+          filters?.search
+            ? {
+                OR: [
+                  { name: { contains: filters.search, mode: 'insensitive' } },
+                  { description: { contains: filters.search, mode: 'insensitive' } },
+                  { location: { contains: filters.search, mode: 'insensitive' } },
+                ],
+              }
+            : {},
+          filters?.category
+            ? { category: { title: { contains: filters.category, mode: 'insensitive' } } }
+            : {},
+          filters?.location
+            ? { location: { contains: filters.location, mode: 'insensitive' } }
+            : {},
+          filters?.availability
+            ? { availability: { contains: filters.availability, mode: 'insensitive' } }
+            : {},
+          filters?.minPrice !== undefined ? { price: { gte: filters.minPrice } } : {},
+          filters?.maxPrice !== undefined ? { price: { lte: filters.maxPrice } } : {},
+          filters?.rating !== undefined ? { rating: { gte: filters.rating } } : {},
+          filters?.durationDays !== undefined
+            ? { durationDays: filters.durationDays }
+            : {},
+          filters?.businessId !== undefined ? { businessId: filters.businessId } : {},
+          filters?.sectionId !== undefined
+            ? { business: { sectionId: filters.sectionId } }
+            : {},
+        ],
+      },
       include: {
         category: true,
         business: { select: { id: true, name: true, logoUrl: true } },
@@ -62,6 +105,13 @@ export class DestinationService {
         itinerary: { orderBy: { day: 'asc' } },
         reviewsDetail: { orderBy: { reviewedAt: 'desc' } },
       },
+    });
+  }
+
+  static async getReviews(destinationId: number) {
+    return prisma.destinationReview.findMany({
+      where: { destinationId },
+      orderBy: { reviewedAt: 'desc' },
     });
   }
 

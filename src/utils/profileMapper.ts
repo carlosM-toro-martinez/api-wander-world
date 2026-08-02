@@ -5,6 +5,8 @@ export type UserWithDetails = {
   name: string;
   email: string;
   initials: string | null;
+  phone?: string | null;
+  country?: string | null;
   stats: { trips: number; countries: number; favorites: number } | null;
   favorites: { destinationId: number }[];
   trips: { id: number; date: Date; status: string; country: string }[];
@@ -35,6 +37,8 @@ export function mapUserToProfile(user: UserWithDetails): Profile {
     name: user.name,
     email: user.email,
     initials: user.initials ?? '',
+    phone: user.phone ?? '',
+    country: user.country ?? '',
     stats: user.stats
       ? {
           trips: user.stats.trips,

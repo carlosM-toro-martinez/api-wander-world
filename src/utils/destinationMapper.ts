@@ -27,6 +27,8 @@ export type DestinationRecord = {
 };
 
 export function mapDestination(destination: DestinationRecord): Destination {
+  const publicBaseUrl = process.env.PUBLIC_APP_URL ?? 'https://kawsay.bo';
+
   return {
     id: destination.id,
     name: destination.name,
@@ -35,6 +37,7 @@ export function mapDestination(destination: DestinationRecord): Destination {
     rating: destination.rating,
     reviews: destination.reviewsCount,
     price: destination.price,
+    shareUrl: `${publicBaseUrl}/destinations/${destination.id}`,
     category: destination.category.title,
     business: {
       id: destination.business.id,

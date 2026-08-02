@@ -48,6 +48,20 @@ export class NotificationService {
     });
   }
 
+  static async markAsRead(id: number) {
+    return prisma.notification.update({
+      where: { id },
+      data: { isRead: true },
+    });
+  }
+
+  static async markAllAsRead(userId?: number) {
+    return prisma.notification.updateMany({
+      where: userId ? { userId } : undefined,
+      data: { isRead: true },
+    });
+  }
+
   static async remove(id: number) {
     return prisma.notification.delete({ where: { id } });
   }

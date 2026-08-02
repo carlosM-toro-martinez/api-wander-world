@@ -51,6 +51,19 @@ body {
   text-transform: uppercase;
 }
 
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-link {
+  color: var(--accent-2);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -175,5 +188,9 @@ pre {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+  .top-actions {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

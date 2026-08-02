@@ -134,6 +134,51 @@ export class NotificationController {
     }
   }
 
+  static async markAsRead(req: Request, res: Response): Promise<void> {
+    try {
+      const id = getIdParam(req);
+      if (!id) {
+        res.status(400).json({ error: 'Invalid id' });
+        return;
+      }
+      const record = await NotificationService.markAsRead(id);
+      res.json({
+        id: record.id,
+        icon: record.icon,
+        iconBg: record.iconBg,
+        iconColor: record.iconColor,
+        title: record.title,
+        description: record.description,
+        time: record.timeLabel ?? formatDateEsShort(record.sentAt),
+        unread: !record.isRead,
+      });
+    } catch (error) {
+      const prismaError = error as { code?: string };
+      if (prismaError?.code === 'P2025') {
+        res.status(404).json({ error: 'Notification not found' });
+        return;
+      }
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  static async markAllAsRead(req: Request, res: Response): Promise<void> {
+    try {
+      const rawUserId =
+        (req.query.userId as string | undefined) ??
+        (req.body as { userId?: string | number }).userId;
+      const userId = rawUserId ? Number(rawUserId) : undefined;
+      if (rawUserId && (!userId || Number.isNaN(userId))) {
+        res.status(400).json({ error: 'Invalid userId' });
+        return;
+      }
+      const result = await NotificationService.markAllAsRead(userId);
+      res.json({ updated: result.count });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
   static async remove(req: Request, res: Response): Promise<void> {
     try {
       const id = getIdParam(req);

@@ -44,6 +44,8 @@ export class UserService {
     passwordHash: string;
     initials?: string | null;
     avatarUrl?: string | null;
+    phone?: string | null;
+    country?: string | null;
     stats?: { trips: number; countries: number; favorites: number };
     favoriteDestinationIds?: number[];
   }) {
@@ -54,6 +56,8 @@ export class UserService {
         passwordHash: data.passwordHash,
         initials: data.initials ?? null,
         avatarUrl: data.avatarUrl ?? null,
+        phone: data.phone ?? null,
+        country: data.country ?? null,
         stats: data.stats
           ? {
               create: {
@@ -90,6 +94,8 @@ export class UserService {
       passwordHash?: string;
       initials?: string | null;
       avatarUrl?: string | null;
+      phone?: string | null;
+      country?: string | null;
     },
   ) {
     return prisma.user.update({
@@ -100,6 +106,13 @@ export class UserService {
         passwordHash: data.passwordHash,
         initials: data.initials ?? undefined,
         avatarUrl: data.avatarUrl ?? undefined,
+        phone: data.phone ?? undefined,
+        country: data.country ?? undefined,
+      },
+      include: {
+        stats: true,
+        favorites: { select: { destinationId: true } },
+        trips: { select: { id: true, date: true, status: true, country: true } },
       },
     });
   }
